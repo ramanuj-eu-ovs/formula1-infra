@@ -1,0 +1,37 @@
+name: Create a PR with the updated docs
+on:
+  push:
+    branches:
+      - main
+      
+permissions:
+  contents: write
+  pull-requests: write
+  id-token: write  
+
+jobs:
+  # sync-dependabot:
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #   - uses: actions/checkout@v4
+
+  #   - uses: terraform-docs/gh-actions@v1.0.0
+  #     with:
+  #       working-dir: .
+  #       config-file: .terraform-docs.yml
+
+  #   - name: Create Pull Request
+  #     id: cpr
+  #     uses: peter-evans/create-pull-request@v5
+  #     with:
+  #       base: main
+  #       title: Updated terraform-docs
+  #       body: Updated terraform-docs
+  #       commit-message: "[terraform-docs] automated change"
+
+  apply:
+    name: Terraform
+    uses: ./.github/workflows/apply.yml
+    with:
+      environment: ops
+    secrets: inherit

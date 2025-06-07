@@ -1,0 +1,46 @@
+name: Create terraform backend - StaeFile
+
+on:
+  workflow_dispatch:
+    inputs:
+      environment:
+        required: true
+        type: string
+
+permissions:
+  contents: read
+  id-token: write
+
+jobs:
+  create_backend:
+    runs-on: ubuntu-latest
+    environment: ${{ inputs.environment }}       
+    steps:
+      - uses: actions/checkout@v4
+      - name: Azure authenticate
+        uses: azure/login@v1
+        with:
+          creds: '{"clientId":"${{ vars.AZURE_CLIENT_ID }}","clientSecret":"${{ secrets.AZURE_CLIENT_SECRET }}","subscriptionId":"${{ vars.AZURE_SUBSCRIPTION_ID }}","tenantId":"${{ vars.AZURE_TENANT_ID }}"}'
+
+      - name: Create Azure resources
+        run: |
+          set -eu  # fail on error
+
+          cat env/${{ inputs.environment }}/vars/backend-config.tfvars | tr -d '\r' | tr -d ' ' > backend-config.source
+          source backend-config.source
+
+          RG_NAME="$resource_group_name"
+          ST_NAME="$storage_account_name"
+
+          az group create --location westeurope --name ${RG_NAME}
+          az storage account create --location westeurope --resource-group ${RG_NAME} --name ${ST_NAME} --sku Standard_LRS --https-only true
+          az storage account blob-service-properties update --resource-group ${RG_NAME} --account-name ${ST_NAME} --enable-versioning true
+          az storage container create --resource-group ${RG_NAME} --account-name ${ST_NAME} --name terraformstate
+
+          # Add GDD pal id, this will help us to gain visibility within Microsoft
+          # Helping us get access to private preview features etc. For more information see
+          # https://docs.microsoft.com/en-us/azure/cost-management-billing/manage/link-partner-id
+          # az extension add --yes --name managementpartner
+          # set +e
+          # az managementpartner create --partner-id 4529923
+          # set -e  

@@ -1,0 +1,22 @@
+# version: 2
+# updates:
+  
+#   - package-ecosystem: "terraform"
+#     directory: "/"
+#     schedule:
+#       interval: "weekly"
+#       time: "01:00"
+#     groups:
+#       providers:
+#         patterns:
+#           - "*"
+    
+#   - package-ecosystem: "github-actions"
+#     directory: "/"
+#     schedule:
+#       interval: "weekly"
+#       time: "01:00"
+#     groups:
+#       actions:
+#         patterns:
+#           - "*"

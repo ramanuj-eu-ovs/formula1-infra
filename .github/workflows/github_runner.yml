@@ -1,0 +1,45 @@
+name: Create a Github runner
+on:
+  workflow_dispatch:
+    inputs:
+      environment:
+        required: true
+        type: string
+  
+permissions:
+  contents: read
+  id-token: write
+
+jobs: 
+  deploy:
+    runs-on: ubuntu-latest
+    environment: ${{ inputs.environment }}       
+    timeout-minutes: 15
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Azure authenticate
+      uses: azure/login@v1
+      with:
+        creds: '{"clientId":"${{ vars.AZURE_CLIENT_ID }}","clientSecret":"${{ secrets.AZURE_CLIENT_SECRET }}","subscriptionId":"${{ vars.AZURE_SUBSCRIPTION_ID }}","tenantId":"${{ vars.AZURE_TENANT_ID }}"}'
+
+    - name: Redeploy runner
+      run: |
+        set -e  # fail on error
+
+        RG_NAME='github-action-runners'
+
+        GH_VM_NAME="Runner-$(date +%Y-%m-%d)"
+        GH_RUNNER_VERSION="2.309.0"
+        
+        # https://docs.github.com/en/rest/actions/self-hosted-runners?apiVersion=2022-11-28#create-a-registration-token-for-an-organization
+        GITHUB_TOKEN=${{ secrets.ACTION_TOKEN }}
+        GITHUB_ORG="xebia-base"
+        GITHUB_TOKEN_URL="https://api.github.com/orgs/${GITHUB_ORG}/actions/runners/registration-token"
+        RUNNER_TOKEN=$(curl -sX POST -H "Authorization: token ${GITHUB_TOKEN}" ${GITHUB_TOKEN_URL} | jq -r .token)
+
+        # create new one
+        az vm create -g $RG_NAME -n $GH_VM_NAME --public-ip-address "" --size Standard_B1ms --image Ubuntu2204 --generate-ssh-keys
+        az vm run-command create --name "Install-Deps" -g $RG_NAME --vm-name $GH_VM_NAME --script 'apt-get update && apt-get install -y unzip git'
+        az vm run-command create --name "Install-Docker" -g $RG_NAME --vm-name $GH_VM_NAME --script 'curl -sSL https://get.docker.io/ | sh'
+        az vm run-command create --name "Install-Agent" -g $RG_NAME --vm-name $GH_VM_NAME --timeout-in-seconds 3600 --script 'export RUNNER_ALLOW_RUNASROOT="1" && mkdir actions-runner && cd actions-runner && curl -L -s https://github.com/actions/runner/releases/download/v$VERSION/actions-runner-linux-x64-$VERSION.tar.gz | tar xz && ./config.sh --url https://github.com/$ORG --token $TOKEN --unattended && ./run.sh & ' --parameters VERSION=$GH_RUNNER_VERSION ORG=$GITHUB_ORG TOKEN=$RUNNER_TOKEN
