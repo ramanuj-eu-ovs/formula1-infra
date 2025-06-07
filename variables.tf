@@ -3,7 +3,7 @@ variable "project_name" {
   type        = string
 
   validation {
-    condition     = can(regex("^[a-z0-9]*$", var.project_name)) && length(var.project_name) <= 4
+    condition     = can(regex("^[a-z0-9]*$", var.project_name)) && length(var.project_name) == 8
     error_message = "The project name value must not contain special characters, and is max 4 characters long."
   }
 }
