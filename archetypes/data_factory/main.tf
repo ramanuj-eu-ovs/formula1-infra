@@ -83,23 +83,23 @@ module "key_vault" {
   vnet_rules                 = var.vnet_rules
 }
 
-module "sql_server" {
-  source                     = "../../modules/sql"
-  sql_server_name            = module.naming.sql_server.name
-  resource_group_name        = var.resource_group_name
-  location                   = var.location
-  log_analytics_workspace_id = var.log_analytics_workspace_id
-  key_vault_id               = module.key_vault.key_vault_id
+# module "sql_server" {
+#   source                     = "../../modules/sql"
+#   sql_server_name            = module.naming.sql_server.name
+#   resource_group_name        = var.resource_group_name
+#   location                   = var.location
+#   log_analytics_workspace_id = var.log_analytics_workspace_id
+#   key_vault_id               = module.key_vault.key_vault_id
 
-  application_databases = [{
-    "name" : "watermarks",
-    "sku_name" : "Basic",
-    "max_size_gb" : "2",
-    "additional_aad_admins" : { adf = module.data_factory.data_factory_principal_id }
-  }]
+#   application_databases = [{
+#     "name" : "watermarks",
+#     "sku_name" : "Basic",
+#     "max_size_gb" : "2",
+#     "additional_aad_admins" : { adf = module.data_factory.data_factory_principal_id }
+#   }]
 
-  vnet_rules = var.vnet_rules
+#   vnet_rules = var.vnet_rules
 
-  tags             = var.tags
-  private_endpoint = local.deploy_pe ? { name = "${module.naming.private_endpoint.name}-sql", subnet_id = var.private_endpoint.subnet_id } : null
-}
+#   tags             = var.tags
+#   private_endpoint = local.deploy_pe ? { name = "${module.naming.private_endpoint.name}-sql", subnet_id = var.private_endpoint.subnet_id } : null
+# }

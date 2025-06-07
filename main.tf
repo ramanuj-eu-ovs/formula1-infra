@@ -152,36 +152,36 @@ module "databricks_datalake" {
   autotermination_minutes = local.databricks_compute_autotermination_minutes
 }
 
-module "databricks_unity" {
-  source             = "./archetypes/databricks_unity"
-  count              = var.metastore_id != null ? 1 : 0
-  naming             = module.naming_datalake.settings
-  storage_account_id = module.datalake.storage_account_id
+# module "databricks_unity" {
+#   source             = "./archetypes/databricks_unity"
+#   count              = var.metastore_id != null ? 1 : 0
+#   naming             = module.naming_datalake.settings
+#   storage_account_id = module.datalake.storage_account_id
 
-  catalog = {
-    name      = local.databricks_unity_catalog_name
-    container = "transformations"
-    schemas   = toset(["farmcentre_source", "farmcentre_predictions", "farmcentre_staging", "farmcentre_intermediate", "farmcentre_marts", "nirsensor_source", "nirsensor_predictions", "nirsensor_staging", "nirsensor_intermediate", "nirsensor_marts", local.databricks_utils_volume.schema])
-    volumes = toset([
-      local.databricks_utils_volume
-    ])
-  }
+#   catalog = {
+#     name      = local.databricks_unity_catalog_name
+#     container = "transformations"
+#     schemas   = toset(["farmcentre_source", "farmcentre_predictions", "farmcentre_staging", "farmcentre_intermediate", "farmcentre_marts", "nirsensor_source", "nirsensor_predictions", "nirsensor_staging", "nirsensor_intermediate", "nirsensor_marts", local.databricks_utils_volume.schema])
+#     volumes = toset([
+#       local.databricks_utils_volume
+#     ])
+#   }
 
-  storage_account = {
-    name           = module.datalake.storage_account_name,
-    resource_group = module.resource_group_datalake.resource_group_name,
-    containers     = toset(keys(module.datalake.adls_file_systems))
-  }
+#   storage_account = {
+#     name           = module.datalake.storage_account_name,
+#     resource_group = module.resource_group_datalake.resource_group_name,
+#     containers     = toset(keys(module.datalake.adls_file_systems))
+#   }
 
-  databricks_connector = {
-    id           = var.databricks_connector_id
-    principal_id = var.databricks_connector_principal_id
-  }
+#   databricks_connector = {
+#     id           = var.databricks_connector_id
+#     principal_id = var.databricks_connector_principal_id
+#   }
 
-  grants_config = local.grants_config
+#   grants_config = local.grants_config
 
-  depends_on = [module.databricks_datalake.id]
-}
+#   depends_on = [module.databricks_datalake.id]
+# }
 
 module "roles_datalake" {
   source       = "./modules/roles"
