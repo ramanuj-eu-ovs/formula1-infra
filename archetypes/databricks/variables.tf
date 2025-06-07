@@ -68,15 +68,15 @@ variable "tags" {
   description = "Collection of tags that help organizing resources (https://docs.microsoft.com/en-us/azure/cloud-adoption-framework/decision-guides/resource-tagging/?toc=/azure/azure-resource-manager/management/toc.json)."
 }
 
-variable "init_script_volumes" {
-  type        = set(string)
-  description = "Path to init-scripts on volumes to attach to the clusters with unity"
-}
+# variable "init_script_volumes" {
+#   type        = set(string)
+#   description = "Path to init-scripts on volumes to attach to the clusters with unity"
+# }
 
-variable "access_for_service_principals" {
-  type        = set(object({ id = string, client_id = string, principal_id = string, tenant_id = string }))
-  description = "ID's of service principals who get access to this workspace"
-}
+# variable "access_for_service_principals" {
+#   type        = set(object({ id = string, client_id = string, principal_id = string, tenant_id = string }))
+#   description = "ID's of service principals who get access to this workspace"
+# }
 
 variable "autotermination_minutes" {
   type        = number

@@ -77,15 +77,15 @@ variable "vnet_rules" {
   default = []
 }
 
-variable "databricks_connector_id" {
-  type        = string
-  description = "ID of the Databricks Access Connector."
-}
+# variable "databricks_connector_id" {
+#   type        = string
+#   description = "ID of the Databricks Access Connector."
+# }
 
-variable "databricks_connector_principal_id" {
-  type        = string
-  description = "Principal ID to be used for Databricks Access Connector."
-}
+# variable "databricks_connector_principal_id" {
+#   type        = string
+#   description = "Principal ID to be used for Databricks Access Connector."
+# }
 
 variable "adf_alerting_enabled" {
   description = "Determines if the alerting for ADF will be enabled or not."

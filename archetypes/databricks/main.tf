@@ -62,15 +62,15 @@ resource "databricks_cluster" "small" {
     max_workers = 5
   }
 
-  dynamic "init_scripts" {
-    for_each = var.init_script_volumes
-    iterator = init_script
-    content {
-      volumes {
-        destination = init_script.value
-      }
-    }
-  }
+  # dynamic "init_scripts" {
+  #   for_each = var.init_script_volumes
+  #   iterator = init_script
+  #   content {
+  #     volumes {
+  #       destination = init_script.value
+  #     }
+  #   }
+  # }
 
   spark_conf = local.spark_conf
 

@@ -141,11 +141,11 @@ module "databricks_datalake" {
     public_subnet  = module.vnet.subnets["adb-public"],
     private_subnet = module.vnet.subnets["adb-private"],
   }
-  metastore_id = var.metastore_id
+  # metastore_id = var.metastore_id
 
-  access_for_service_principals = [module.data_science_workspace.managed_identity]
+  # access_for_service_principals = [module.data_science_workspace.managed_identity]
 
-  init_script_volumes = toset(module.databricks_sedona[*].databricks_init_script_path)
+  # init_script_volumes = toset(module.databricks_sedona[*].databricks_init_script_path)
 
   spark_conf = local.spark_conf
 
