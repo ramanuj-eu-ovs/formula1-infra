@@ -1,0 +1,77 @@
+roles:
+  technical_owner:
+    subscription:
+    - Reader
+    - Cost Management Reader
+    ingestion:
+    - Contributor
+    datalake:
+    - Contributor
+    - Storage Blob Data Contributor
+    data_science_workspace:
+    - AzureML Data Scientist
+    - AzureML Compute Operator
+    - Managed Identity Operator
+    - Storage Blob Data Contributor
+
+  application_owner:
+    subscription:
+    - Reader
+    ingestion:
+    - Reader
+    - Data Factory Contributor
+    - Key Vault Secrets Officer
+    - Storage Blob Data Contributor
+    datalake:
+    - Contributor
+    - Storage Blob Data Contributor
+    data_science_workspace:
+    - AzureML Data Scientist
+    - AzureML Compute Operator
+    - Managed Identity Operator
+    - Storage Blob Data Contributor
+
+  application_owner_nir:
+    subscription:
+    - Reader
+    ingestion:
+    - Data Factory Contributor
+    - Key Vault Secrets Officer
+    - Storage Blob Data Contributor
+    datalake:
+    - Contributor
+    - Storage Blob Data Contributor
+    data_science_workspace:
+    - AzureML Data Scientist
+    - AzureML Compute Operator
+    - Managed Identity Operator
+    - Storage Blob Data Contributor
+
+  application_stakeholder:
+    subscription:
+    - Reader
+    - Cost Management Reader
+    ingestion:
+    - Storage Blob Data Reader
+
+  business_owner:
+    subscription:
+    - Reader
+    - Cost Management Reader
+
+groups:
+  DP_TECHNICAL_OWNERS:
+    # kdap-technical-owners
+    aad_group: e3ed3179-700a-4d83-8cf7-701f42ff582a
+    roles:
+    - technical_owner
+  DP_APPLICATION_OWNERS:
+    # kdap-application-owners
+    aad_group: 2d547468-ff47-4d1e-920c-92750c89ce22
+    roles:
+    - application_owner
+  DP_APPLICATION_OWNERS_NIR:
+    # kdap-nirapplication-owners
+    aad_group: 1b16ee63-bdfd-40f2-918e-db11319b353a
+    roles:
+    - application_owner_nir

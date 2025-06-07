@@ -4,4 +4,5 @@
     "spark.serializer" : "org.apache.spark.serializer.KryoSerializer"
     "spark.kryo.registrator" : "org.apache.sedona.core.serde.SedonaKryoRegistrator"
   }
+  roles_config  = "./env/${var.environment}/roles/roles.yml"
  }

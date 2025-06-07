@@ -1,0 +1,100 @@
+# loosly based on https://gitlab.com/gitlab-data/permifrost
+roles:
+  technical_owner:
+    catalog:
+      - ALL_PRIVILEGES
+    location:
+      landing:
+        - CREATE_EXTERNAL_TABLE
+        - READ_FILES
+      transformations:
+        - CREATE_EXTERNAL_TABLE
+        - READ_FILES
+      databricksutils:
+        - CREATE_EXTERNAL_TABLE
+        - READ_FILES
+      landing-predictions:
+        - CREATE_EXTERNAL_TABLE
+        - READ_FILES
+
+  application_owner_fc:
+    catalog:
+      - USE_CATALOG
+      - CREATE_SCHEMA
+    location:
+      landing:
+        - CREATE_EXTERNAL_TABLE
+        - READ_FILES
+      landing-predictions:
+        - CREATE_EXTERNAL_TABLE
+        - READ_FILES
+    schema:
+      farmcentre_source:
+      - USE_SCHEMA
+      - CREATE_TABLE
+      - SELECT
+      farmcentre_predictions:
+      - USE_SCHEMA
+      - CREATE_TABLE
+      - SELECT
+      farmcentre_staging:
+      - USE_SCHEMA
+      - CREATE_TABLE
+      - SELECT
+      farmcentre_intermediate:
+      - USE_SCHEMA
+      - CREATE_TABLE
+      - SELECT
+      farmcentre_marts:
+      - USE_SCHEMA
+      - CREATE_TABLE
+      - SELECT
+
+  application_owner_nir:
+    catalog:
+      - USE_CATALOG
+      - CREATE_SCHEMA
+    location:
+      landing:
+        - CREATE_EXTERNAL_TABLE
+        - READ_FILES
+      landing-predictions:
+        - CREATE_EXTERNAL_TABLE
+        - READ_FILES
+    schema:
+      nirsensor_source:
+      - USE_SCHEMA
+      - CREATE_TABLE
+      - SELECT
+      nirsensor_predictions:
+      - USE_SCHEMA
+      - CREATE_TABLE
+      - SELECT
+      nirsensor_staging:
+      - USE_SCHEMA
+      - CREATE_TABLE
+      - SELECT
+      nirsensor_intermediate:
+      - USE_SCHEMA
+      - CREATE_TABLE
+      - SELECT
+      nirsensor_marts:
+      - USE_SCHEMA
+      - CREATE_TABLE
+      - SELECT
+
+
+groups:
+  DP_TECHNICAL_OWNERS:
+    principal: "1HP-Databricks-Group04"
+    roles:
+      - technical_owner
+  DP_APPLICATION_OWNERS:
+    principal: "1HP-Databricks-Group03"
+    roles:
+      - application_owner_fc
+  DP_APPLICATION_OWNERS_NIR:
+    principal: "1HP-Databricks-Group05"
+    roles:
+      - application_owner_nir
+
