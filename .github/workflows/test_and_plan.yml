@@ -1,0 +1,75 @@
+name: Test and Plan
+
+on:
+  - pull_request
+
+permissions:
+  contents: read
+  pull-requests: write
+  id-token: write  
+
+jobs:
+  checkov:
+    name: Checkov
+    # runs-on: common-runner-jpn-ovs-dev-shr-03
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Checkov
+        uses: bridgecrewio/checkov-action@master
+        with:
+          directory: .
+          framework: terraform
+          config_file: checkov.yaml
+          # github_pat: ${{ secrets.AZURE_TF_PAT }}
+        env:
+          GITHUB_OVERRIDE_URL: true
+
+  validate:
+    name: Validate
+    # runs-on: common-runner-jpn-ovs-dev-shr-03
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Validate
+        uses: dflook/terraform-validate@v1
+        with:
+          path: .
+
+  format:
+    name: Format
+    # runs-on: common-runner-jpn-ovs-dev-shr-03
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: terraform fmt
+        uses: dflook/terraform-fmt-check@v1
+        with:
+          path: .
+
+  # lint:
+  #   name: Lint
+  #   # runs-on: common-runner-jpn-ovs-dev-shr-03
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - name: Checkout
+  #       uses: actions/checkout@v4
+  #     - name: Set up TFLint
+  #       uses: terraform-linters/setup-tflint@v4
+  #     - name: Run TFLint
+  #       run: tflint --recursive -f compact --disable-rule terraform_module_pinned_source
+  
+  plan:
+    strategy:
+      matrix:
+        environment: ["ops"]
+    name: Terraform
+    uses: ./.github/workflows/plan.yml
+    needs: validate
+    with:
+      environment: ${{matrix.environment}}
+    secrets: inherit
+  

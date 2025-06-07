@@ -1,0 +1,43 @@
+name: Create terraform plan
+
+on:
+  workflow_call:
+    inputs:
+      environment:
+        required: true
+        type: string
+
+permissions:
+  contents: read
+  pull-requests: write
+  id-token: write
+
+jobs:
+  plan:
+    # runs-on: common-runner-jpn-ovs-dev-shr-03
+    runs-on: ubuntu-latest
+    name: Create a plan for a terraform configuration
+    environment: ${{ inputs.environment }}
+    env:
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      TERRAFORM_PRE_RUN: |
+        # Install latest Azure CLI
+        curl -skL https://aka.ms/InstallAzureCLIDeb | bash
+        az login --service-principal --tenant ${ARM_TENANT_ID} --username ${ARM_CLIENT_ID} --password ${ARM_CLIENT_SECRET} --output table
+      ARM_TENANT_ID: ${{ vars.AZURE_TENANT_ID }}
+      ARM_SUBSCRIPTION_ID: ${{ vars.AZURE_SUBSCRIPTION_ID }}
+      ARM_CLIENT_ID: ${{ vars.AZURE_CLIENT_ID }}
+      ARM_CLIENT_SECRET: "${{ secrets.AZURE_CLIENT_SECRET }}"
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Terraform plan
+        uses: dflook/terraform-plan@v1
+        with:
+          variables: |
+            environment = "${{ inputs.environment }}"          
+          var_file: env/${{ inputs.environment }}/vars/vars.tfvars
+          backend_config_file: env/${{ inputs.environment }}/vars/backend-config.tfvars
+
+    
