@@ -19,7 +19,6 @@ permissions:
 
 jobs:
   apply:
-    # runs-on: common-runner-jpn-ovs-dev-shr-03
     runs-on: ubuntu-latest
     name: Apply a terraform plan
     environment: ${{ inputs.environment }}    

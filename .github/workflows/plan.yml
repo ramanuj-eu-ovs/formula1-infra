@@ -14,7 +14,6 @@ permissions:
 
 jobs:
   plan:
-    # runs-on: common-runner-jpn-ovs-dev-shr-03
     runs-on: ubuntu-latest
     name: Create a plan for a terraform configuration
     environment: ${{ inputs.environment }}

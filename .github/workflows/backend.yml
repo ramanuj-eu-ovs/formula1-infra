@@ -1,4 +1,4 @@
-name: Create terraform backend - StaeFile
+name: Create terraform backend(StateFile)
 
 on:
   workflow_dispatch:
