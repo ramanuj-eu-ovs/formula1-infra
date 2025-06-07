@@ -129,7 +129,6 @@ module "datalake" {
 
 module "databricks_datalake" {
   source = "./archetypes/databricks"
-
   naming              = module.naming_datalake.settings
   location            = var.location
   tags                = var.tags
