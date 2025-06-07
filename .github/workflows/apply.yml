@@ -40,7 +40,7 @@ jobs:
       - name: Terraform apply
         uses: dflook/terraform-apply@v1
         with:
-          # auto_approve: ${{ github.event_name == 'workflow_dispatch' }}
+          auto_approve: ${{ github.event_name == 'workflow_dispatch' }}
           auto-approve: true
           variables: |
             environment = "${{ inputs.environment }}"
